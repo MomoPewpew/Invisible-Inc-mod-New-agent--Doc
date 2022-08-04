@@ -30,7 +30,17 @@ local monitor =
 	end,
 	
 	onTrigger = function( self, sim, evType, evData )
-		
+		if self.abilityOwner and evData and evData:isPC() and not self.abilityOwner:isKO() then
+			local player = self.abilityOwner:getPlayerOwner()
+			for _, unit in pairs( sim:getAllUnits() ) do
+				if unit:isKO() and not unit:getTraits().noghost then
+					newcell = sim:getCell( unit:getLocation() )
+					if not sim:canPlayerSee( player, newcell.x, newcell.y ) then
+						sim:getPC():glimpseUnit( sim, unit:getID() )
+					end
+				end
+			end
+		end
 	end,
 }
 return monitor
