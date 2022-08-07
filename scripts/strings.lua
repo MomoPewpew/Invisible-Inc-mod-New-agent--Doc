@@ -46,6 +46,7 @@ local MOD_STRINGS =
 	ABILITIES =
 	{
 		ABILITY_MONITOR = "Monitor",
+		ABILITY_ACTIVATE_INJECTED_DOSE_NAME = "Activate Injected Dose",
 		ABILITY_SHOOT_STIM = "Shoot Stim",
 		ABILITY_SHOOT_STIM_DESC = "Shoot Stim desc",
 		ABILITY_NO_STIM = "No stim",

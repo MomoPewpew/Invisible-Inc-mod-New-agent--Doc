@@ -12,7 +12,7 @@ local tool_templates =
 		traits = util.extend( commondefs.DEFAULT_AUGMENT_TRAITS ){
 			installed = true,
 		},
-		abilities = util.tconcat( commondefs.augment_template.abilities, { "monitor" }),
+		abilities = util.tconcat( commondefs.augment_template.abilities, { "monitor", "activate_injected_dose", }),
 		profile_icon = "gui/icons/skills_icons/skills_icon_small/icon-item_augment_internationale_small_alt.png",
     	profile_icon_100 = "gui/icons/skills_icons/icon-item_augment_internationale_alt.png",		
 	},
