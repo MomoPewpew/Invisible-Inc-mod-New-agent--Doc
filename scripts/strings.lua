@@ -47,6 +47,8 @@ local MOD_STRINGS =
 	{
 		ABILITY_MONITOR = "Monitor",
 		ABILITY_SHOOT_STIM = "Shoot Stim",
+		ABILITY_SHOOT_STIM_DESC = "Shoot Stim desc",
+		ABILITY_NO_STIM = "No stim",
 	},
 }
 return MOD_STRINGS
