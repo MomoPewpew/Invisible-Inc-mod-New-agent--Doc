@@ -111,7 +111,7 @@ local shoot_stim =
 				end
 
 				--Functionalities
-				targetUnit:getTraits().drugpistoldose = first_stim.unitData.name
+				targetUnit:getTraits().drugpistoldose = first_stim:getUnitData()
 
 				if first_stim:getTraits().disposable then 
 					inventory.trashItem( sim, userUnit, first_stim )
