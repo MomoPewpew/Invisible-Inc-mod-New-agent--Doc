@@ -16,10 +16,12 @@ local monitor =
 	onSpawnAbility = function( self, sim, unit )
 		self.abilityOwner = unit
 		sim:addTrigger( simdefs.TRG_START_TURN, self )
+		sim:addTrigger( simdefs.TRG_END_TURN, self )
 	end,
 		
 	onDespawnAbility = function( self, sim, unit )
 		sim:removeTrigger( simdefs.TRG_START_TURN, self )
+		sim:removeTrigger( simdefs.TRG_END_TURN, self )
 		self.abilityOwner = nil
 	end,
 	
