@@ -66,8 +66,61 @@ local shoot_stim =
 			return false, STRINGS.MOD_DOC.ABILITIES.ABILITY_NO_STIM
 		end,
 		
-		executeAbility = function( self, sim, unit, userUnit, targetCell )
-			
+		executeAbility = function( self, sim, unit, userUnit, targetUnitID )
+			local sim = unit:getSim()
+			local targetUnit = sim:getUnit( targetUnitID )
+
+			local x0,y0 = userUnit:getLocation()
+			local x1,y1 = targetUnit:getLocation()
+		
+			local oldFacing = userUnit:getFacing()
+			local newFacing = simquery.getDirectionFromDelta(x1-x0, y1-y0)
+			simquery.suggestAgentFacing(userUnit, newFacing)
+
+			if userUnit:isValid() and not userUnit:getTraits().interrupted then
+				if (userUnit:getID() ~= targetUnitID) then
+					local oldWeapon = simquery.getEquippedGun( userUnit )
+					unit:getTraits().slot = "gun"
+					inventory.equipItem( userUnit, unit )
+					sim:dispatchEvent( simdefs.EV_UNIT_REFRESH, { unit = userUnit } )
+					
+					local pinning, pinnee = simquery.isUnitPinning(userUnit:getSim(), userUnit)
+					
+					sim:dispatchEvent( simdefs.EV_UNIT_START_SHOOTING, { unitID = userUnit:getID(), newFacing=newFacing, oldFacing=oldFacing, targetUnitID = targetUnit:getID(), pinning=pinning } )
+
+					local dmgt = abilityutil.createShotDamage( unit, userUnit )
+					local evData = { unitID = userUnit:getID(), x0 = x0, y0 = y0, x1=x1, y1=y1, dmgt = dmgt } 	
+		
+					sim:dispatchEvent( simdefs.EV_UNIT_SHOT, evData )
+					sim:dispatchEvent( simdefs.EV_UNIT_STOP_SHOOTING, { unitID = userUnit:getID(), facing=newFacing, pinning=pinning} )
+
+					inventory.unequipItem( userUnit, unit )
+					unit:getTraits().slot = nil
+					
+					if (oldWeapon) then
+						inventory.equipItem( userUnit, oldWeapon )
+						oldWeapon = nil
+					end
+
+					sim:dispatchEvent( simdefs.EV_UNIT_REFRESH, { unit = userUnit } )
+					
+					sim:processReactions()
+				else
+					sim:dispatchEvent( simdefs.EV_UNIT_HEAL, { unit = userUnit, target = targetUnit, revive = false, facing = newFacing } )
+					sim:dispatchEvent( simdefs.EV_UNIT_REFRESH, { unit = targetUnit  } )
+				end
+
+				--Functionalities
+
+				if first_stim:getTraits().disposable then 
+					inventory.trashItem( sim, userUnit, first_stim )
+				else
+					inventory.useItem( sim, userUnit, first_stim )
+				end
+			end
+			if userUnit:isValid() and not userUnit:getTraits().interrupted then
+				simquery.suggestAgentFacing(userUnit, newFacing)
+			end
 		end,
 	}
 return shoot_stim

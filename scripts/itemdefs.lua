@@ -31,6 +31,7 @@ local tool_templates =
 		traits = {
 			equipped = false,
 			slot = nil,
+			baseDamage = 0,
 		},
 		abilities = { "carryable", "shoot_stim", },
 		value = 600,
