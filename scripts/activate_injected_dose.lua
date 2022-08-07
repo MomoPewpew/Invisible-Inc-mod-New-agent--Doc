@@ -22,8 +22,10 @@ local activate_injected_dose =
 			return self.name
 		end,
 	
-		createToolTip = function( self,sim,unit,targetCell)
-			return abilityutil.formatToolTip( STRINGS.MOD_DOC.ABILITIES.ABILITY_ACTIVATE_INJECTED_DOSE_NAME, 1 )
+		createToolTip = function( self, sim, abilityOwner, abilityUser, targetUnitID )
+            local targetUnit = sim:getUnit( targetUnitID )
+            local unitData = targetUnit:getTraits().drugpistoldose
+			return (STRINGS.MOD_DOC.ABILITIES.ABILITY_ACTIVATE_INJECTED_DOSE_ACTIVATE .. unitData.name)
 		end,
 	
 		profile_icon = "gui/icons/item_icons/items_icon_small/icon-item_stim_small.png",
