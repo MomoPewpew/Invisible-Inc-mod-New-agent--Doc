@@ -103,9 +103,9 @@ local activate_injected_dose =
                 end
             end
             
-            if targetUnit:isKO() and newUnit:hasAbility("use_medgel") then
+            if newUnit:hasAbility("use_medgel") and targetUnit:isKO() then
                 if targetUnit:isDead() then
-                    assert( targetUnit:getWounds() >= targetUnit:getTraits().woundsMax ) -- Cause they're dead, should have more wounds than max
+                    assert( targetUnit:getWounds() >= targetUnit:getTraits().woundsMax )
                     targetUnit:getTraits().dead = nil
                     targetUnit:addWounds( targetUnit:getTraits().woundsMax - targetUnit:getWounds() - 1 )			
                 end
