@@ -33,7 +33,7 @@ local tool_templates =
 			slot = nil,
 			baseDamage = 0,
 		},
-		abilities = { "carryable", "shoot_stim", },
+		abilities = { "carryable", "shoot_stim", "shoot_medgel", "shoot_defiblance", },
 		value = 600,
 	},
 }

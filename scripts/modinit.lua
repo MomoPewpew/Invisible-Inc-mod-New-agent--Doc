@@ -35,6 +35,8 @@ local function load( modApi, options, params, mod_options )
 	modApi:addAbilityDef( "monitor", scriptPath .."/monitor" )
 	modApi:addAbilityDef( "activate_injected_dose", scriptPath .."/activate_injected_dose" )
 	modApi:addAbilityDef( "shoot_stim", scriptPath .."/shoot_stim" )
+	modApi:addAbilityDef( "shoot_medgel", scriptPath .."/shoot_medgel" )
+	modApi:addAbilityDef( "shoot_defiblance", scriptPath .."/shoot_defiblance" )
 end
 
 return

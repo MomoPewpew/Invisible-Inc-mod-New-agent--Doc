@@ -14,21 +14,21 @@ local itemdefs = include("sim/unitdefs/itemdefs")
 local guarddefs = include("sim/unitdefs/guarddefs")
 local propdefs = include("sim/unitdefs/propdefs")
 
-local first_stim = nil
+local first_defiblance = nil
 
-local shoot_stim =
+local shoot_defiblance =
 	{
-		name = STRINGS.MOD_DOC.ABILITIES.ABILITY_SHOOT_STIM,
+		name = STRINGS.MOD_DOC.ABILITIES.ABILITY_SHOOT_DEFIBLANCE,
 
 		getName = function( self, sim, unit, userUnit )
 			return self.name
 		end,
 	
 		createToolTip = function( self,sim,unit,targetCell)
-			return abilityutil.formatToolTip( STRINGS.MOD_DOC.ABILITIES.ABILITY_SHOOT_STIM,  STRINGS.MOD_DOC.ABILITIES.ABILITY_SHOOT_STIM_DESC, 1 )
+			return abilityutil.formatToolTip( STRINGS.MOD_DOC.ABILITIES.ABILITY_SHOOT_DEFIBLANCE,  STRINGS.MOD_DOC.ABILITIES.ABILITY_SHOOT_DEFIBLANCE_DESC, 1 )
 		end,
 	
-		profile_icon = "gui/icons/item_icons/items_icon_small/icon-item_stim_small.png",
+		profile_icon = "gui/icons/item_icons/items_icon_small/icon-item_defibulator_small.png",
 		usesAction = true,
 
 		isTarget = function( self, sim, userUnit, targetUnit )
@@ -52,18 +52,18 @@ local shoot_stim =
 
 		canUseAbility = function( self, sim, unit, userUnit, targetCell )
 			for _, item in pairs( userUnit:getChildren() ) do
-				if item:hasAbility("use_stim")
+				if item:hasAbility("use_aggression")
 				and not (item:getTraits().cooldown and item:getTraits().cooldown >= 1)
 				and not (item:getTraits().usesCharges and item:getTraits().charges == 0)
 				and not (item:getTraits().ammo and item:getTraits().ammo == 0)
 				and not (item:getTraits().pwrCost and userUnit:getPlayerOwner():getCpus() < item:getTraits().pwrCost)
 				then
-					first_stim = item
+					first_defiblance = item
 					return true
 				end
 			end
 
-			return false, STRINGS.MOD_DOC.ABILITIES.ABILITY_NO_STIM
+			return false, STRINGS.MOD_DOC.ABILITIES.ABILITY_NO_DEFIBLANCE
 		end,
 		
 		executeAbility = function( self, sim, unit, userUnit, targetUnitID )
@@ -111,12 +111,12 @@ local shoot_stim =
 				end
 
 				--Functionalities
-				targetUnit:getTraits().drugpistoldose = first_stim:getUnitData()
+				targetUnit:getTraits().drugpistoldose = first_defiblance:getUnitData()
 
-				if first_stim:getTraits().disposable then 
-					inventory.trashItem( sim, userUnit, first_stim )
+				if first_defiblance:getTraits().disposable then 
+					inventory.trashItem( sim, userUnit, first_defiblance )
 				else
-					inventory.useItem( sim, userUnit, first_stim )
+					inventory.useItem( sim, userUnit, first_defiblance )
 				end
 			end
 			if userUnit:isValid() and not userUnit:getTraits().interrupted then
@@ -124,4 +124,4 @@ local shoot_stim =
 			end
 		end,
 	}
-return shoot_stim
+return shoot_defiblance

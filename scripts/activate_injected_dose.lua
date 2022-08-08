@@ -34,11 +34,12 @@ local activate_injected_dose =
 
 		isTarget = function( self, sim, userUnit, targetUnit )
 			if targetUnit:getTraits().drugpistoldose then
+                local unitData = targetUnit:getTraits().drugpistoldose
                 local newUnit = simfactory.createUnit( unitData, sim )
 
-                if newUnit:hasAbility("use_medgel") and targetUnit:isKO() and not simquery.isUnitCellFull(self, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                if newUnit:hasAbility("use_medgel") and targetUnit:isKO() and not simquery.isUnitPinned(self, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
                     return true
-                elseif newUnit:hasAbility("use_stim") and not targetUnit:isDead() and not simquery.isUnitCellFull(self, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                elseif newUnit:hasAbility("use_stim") and not targetUnit:isDead() and not simquery.isUnitPinned(self, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
                     return true
                 elseif newUnit:hasAbility("use_aggression") and not targetUnit:isKO() then
                     return true
@@ -49,7 +50,7 @@ local activate_injected_dose =
 		acquireTargets = function( self, targets, game, sim, unit, userUnit )
 			local units = {}
 			for _, unit in pairs( sim:getAllUnits() ) do
-				if self:isTarget( sim, userUnit, unit ) then
+				if self:isTarget(self, sim, userUnit, unit ) then
 					table.insert( units, unit )
 				end
 			end

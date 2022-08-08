@@ -51,6 +51,12 @@ local MOD_STRINGS =
 		ABILITY_SHOOT_STIM = "Shoot Stim",
 		ABILITY_SHOOT_STIM_DESC = "Shoot Stim desc",
 		ABILITY_NO_STIM = "No stim",
+		ABILITY_SHOOT_MEDGEL = "Shoot Med Gel",
+		ABILITY_SHOOT_MEDGEL_DESC = "Shoot Med Gel desc",
+		ABILITY_NO_MEDGEL = "No Med Gel",
+		ABILITY_SHOOT_DEFIBLANCE = "Shoot Ventricular Lance",
+		ABILITY_SHOOT_DEFIBLANCE_DESC = "Shoot Ventricular Lance desc",
+		ABILITY_NO_DEFIBLANCE = "No Ventricular Lance",
 	},
 }
 return MOD_STRINGS
