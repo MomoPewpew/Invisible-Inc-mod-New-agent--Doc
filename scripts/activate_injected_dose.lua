@@ -37,10 +37,6 @@ local activate_injected_dose =
 		createToolTip = function( self, sim, abilityOwner, abilityUser, targetUnitID )
             local targetUnit = sim:getUnit( targetUnitID )
             local unitData = targetUnit:getTraits().drugpistoldose
-            if self:unitDataHasAbility(unitData, "use_medgel") then self.profile_icon = "gui/icons/item_icons/items_icon_small/icon-item_medigel_small.png"
-            elseif self:unitDataHasAbility(unitData, "use_aggression") then self.profile_icon = "gui/icons/item_icons/items_icon_small/icon-item_defibulator_small.png"
-            else self.profile_icon = "gui/icons/item_icons/items_icon_small/icon-item_stim_small.png"
-            end
 			return (STRINGS.MOD_DOC.ABILITIES.ABILITY_ACTIVATE_INJECTED_DOSE_ACTIVATE .. unitData.name)
 		end,
 	
