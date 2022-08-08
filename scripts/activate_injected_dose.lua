@@ -34,7 +34,15 @@ local activate_injected_dose =
 
 		isTarget = function( self, sim, userUnit, targetUnit )
 			if targetUnit:getTraits().drugpistoldose then
-                return true
+                local newUnit = simfactory.createUnit( unitData, sim )
+
+                if newUnit:hasAbility("use_medgel") and targetUnit:isKO() and not simquery.isUnitCellFull(self, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                    return true
+                elseif newUnit:hasAbility("use_stim") and not targetUnit:isDead() and not simquery.isUnitCellFull(self, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                    return true
+                elseif newUnit:hasAbility("use_aggression") and not targetUnit:isKO() then
+                    return true
+                end
             end
 		end,
 
@@ -116,6 +124,7 @@ local activate_injected_dose =
                 targetUnit:getTraits().genericPiercing = (targetUnit:getTraits().genericPiercing or 0) + 1
             end
 
+            targetUnit:getTraits().drugpistoldose = nil
             sim:dispatchEvent( simdefs.EV_UNIT_REFRESH, { unit =targetUnit  } )
         end
 	}
