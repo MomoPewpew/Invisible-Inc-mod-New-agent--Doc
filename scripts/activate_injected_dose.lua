@@ -21,18 +21,6 @@ local activate_injected_dose =
 		getName = function( self, sim, unit, userUnit )
 			return self.name
 		end,
-
-        unitDataHasAbility = function( unitData, abilityID )
-            if unitData.abilities then
-                for i,ability in ipairs(unitData.abilities) do
-                    if ability:getID() == abilityID then
-                        return true
-                    end
-                end
-            end
-        
-            return false
-        end,
 	
 		createToolTip = function( self, sim, abilityOwner, abilityUser, targetUnitID )
             local targetUnit = sim:getUnit( targetUnitID )
@@ -67,10 +55,68 @@ local activate_injected_dose =
 		
 		executeAbility = function( self, sim, unit, userUnit, targetUnitID )
             local targetUnit = sim:getUnit( targetUnitID )
+            local x1,y1 = targetUnit:getLocation()
             local unitData = targetUnit:getTraits().drugpistoldose
-            --newUnit = simfactory.createUnit( unitData, sim )
-            --sim:spawnUnit( newUnit )
-            --self:doInjection( sim, newUnit, userUnit, targetUnitID )
+            local newUnit = simfactory.createUnit( unitData, sim )
+
+            if newUnit:getTraits().mpRestored then
+                if targetUnit:isKO() then
+                    sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.REVIVED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
+
+                    targetUnit:setKO( sim, nil )
+
+                    sim:emitSpeech( targetUnit, speechdefs.EVENT_REVIVED )
+                end
+            end
+                
+            if newUnit:getTraits().combatRestored then 
+                targetUnit:getTraits().ap = targetUnit:getTraits().apMax	
+            end 
+
+            if newUnit:getTraits().unlimitedAttacks then
+                sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.AMPED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} ) 
+                targetUnit:getTraits().ap = targetUnit:getTraits().apMax
+                targetUnit:getTraits().unlimitedAttacks = true
+            end 
+
+            if newUnit:getTraits().mpRestored then
+                targetUnit:getTraits().mp =targetUnit:getTraits().mp + newUnit:getTraits().mpRestored
+
+                sim:dispatchEvent( simdefs.EV_GAIN_AP, { unit = targetUnit } )
+                sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.MOVEMENT_BOOSTED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
+
+                local cnt, augments = targetUnit:countAugments( "augment_subdermal_cloak" )
+                if cnt > 0 then
+                    local pwrCost = augments[1]:getTraits().pwrCost
+                    if targetUnit:getPlayerOwner():getCpus() >= pwrCost then
+                        targetUnit:setInvisible(true, 1)	
+                        targetUnit:getPlayerOwner():addCPUs( -pwrCost, sim, x1, y1)	
+                    end
+                end
+            end
+            
+            if targetUnit:isKO() and newUnit:hasAbility("use_medgel") then
+                if targetUnit:isDead() then
+                    assert( targetUnit:getWounds() >= targetUnit:getTraits().woundsMax ) -- Cause they're dead, should have more wounds than max
+                    targetUnit:getTraits().dead = nil
+                    targetUnit:addWounds( targetUnit:getTraits().woundsMax - targetUnit:getWounds() - 1 )			
+                end
+
+                sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.REVIVED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
+
+                targetUnit:setKO( sim, nil )
+                targetUnit:getTraits().mp = math.max( 0, targetUnit:getMPMax() - (targetUnit:getTraits().overloadCount or 0) )
+
+                sim:emitSpeech( targetUnit, speechdefs.EVENT_REVIVED )
+            end
+
+            if newUnit:hasAbility("use_aggression") then
+                sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.VENTRICULAR_PIERCING,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
+
+                targetUnit:getTraits().genericPiercing = (targetUnit:getTraits().genericPiercing or 0) + 1
+            end
+
+            sim:dispatchEvent( simdefs.EV_UNIT_REFRESH, { unit =targetUnit  } )
         end
 	}
 return activate_injected_dose
