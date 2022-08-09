@@ -35,13 +35,14 @@ local activate_injected_dose =
 		isTarget = function( self, sim, userUnit, targetUnit )
 			if targetUnit:getTraits().drugpistoldose then
                 local unitData = targetUnit:getTraits().drugpistoldose
-                local newUnit = simfactory.createUnit( unitData, sim )
 
-                if newUnit:hasAbility("use_medgel") and targetUnit:isKO() and not simquery.isUnitPinned( sim, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                if unitData.usableWhileDead and targetUnit:isDead() and not simquery.isUnitPinned( sim, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
                     return true
-                elseif newUnit:hasAbility("use_stim") and not targetUnit:isDead() and not simquery.isUnitPinned( sim, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                end
+                if unitData.usableWhileKO and targetUnit:isKO() and not targetUnit:isDead() and not simquery.isUnitPinned( sim, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
                     return true
-                elseif newUnit:hasAbility("use_aggression") and not targetUnit:isKO() then
+                end
+                if unitData.usableWhileAlive and not targetUnit:isKO() then
                     return true
                 end
             end

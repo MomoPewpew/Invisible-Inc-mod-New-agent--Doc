@@ -111,7 +111,18 @@ local shoot_stim =
 				end
 
 				--Functionalities
-				targetUnit:getTraits().drugpistoldose = first_stim:getUnitData()
+				local unitData = first_stim:getUnitData()
+				if first_stim:hasAbility("use_medgel") then
+					unitData.usableWhileDead = true
+					unitData.usableWhileKO = true
+				end
+				if first_stim:hasAbility("use_stim") then
+					unitData.usableWhileKO = true
+					unitData.usableWhileAlive = true
+				end
+				if first_stim:hasAbility("use_aggression") then unitData.usableWhileAlive = true end
+
+				targetUnit:getTraits().drugpistoldose = unitData
 
 				if first_stim:getTraits().disposable then 
 					inventory.trashItem( sim, userUnit, first_stim )
