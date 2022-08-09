@@ -122,6 +122,8 @@ local shoot_defiblance =
 				end
 				if first_defiblance:hasAbility("use_aggression") then unitData.usableWhileAlive = true end
 
+				targetUnit:getTraits().drugpistoldose = unitData
+
 				if first_defiblance:getTraits().disposable then 
 					inventory.trashItem( sim, userUnit, first_defiblance )
 				else
