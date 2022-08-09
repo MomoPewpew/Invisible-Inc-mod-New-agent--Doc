@@ -56,7 +56,7 @@ local agent_templates =
 			"gui/agents/team_select_1_shalem.png",
 		},
 		
-		kanim = "kanim_sharpshooter_male",
+		kanim = "kanim_sharpshooter_male_a",
 		hireText =  STRINGS.MOD_DOC.AGENTS.DOC.RESCUED,
 		traits = util.extend( commondefs.DEFAULT_AGENT_TRAITS ) { mp=8, mpMax =8, },
 		skills = util.extend( commondefs.DEFAULT_AGENT_SKILLS ) {}, 
