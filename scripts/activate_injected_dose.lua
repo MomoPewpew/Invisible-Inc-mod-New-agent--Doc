@@ -69,6 +69,21 @@ local activate_injected_dose =
             local unitData = targetUnit:getTraits().drugpistoldose
             local newUnit = simfactory.createUnit( unitData, sim )
 
+            if newUnit:hasAbility("use_medgel") and targetUnit:isKO() then
+                if targetUnit:isDead() then
+                    assert( targetUnit:getWounds() >= targetUnit:getTraits().woundsMax )
+                    targetUnit:getTraits().dead = nil
+                    targetUnit:addWounds( targetUnit:getTraits().woundsMax - targetUnit:getWounds() - 1 )			
+                end
+
+                sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.REVIVED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
+
+                targetUnit:setKO( sim, nil )
+                targetUnit:getTraits().mp = math.max( 0, targetUnit:getMPMax() - (targetUnit:getTraits().overloadCount or 0) )
+
+                sim:emitSpeech( targetUnit, speechdefs.EVENT_REVIVED )
+            end
+
             if newUnit:getTraits().mpRestored then
                 if targetUnit:isKO() then
                     sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.REVIVED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
@@ -103,21 +118,6 @@ local activate_injected_dose =
                         targetUnit:getPlayerOwner():addCPUs( -pwrCost, sim, x1, y1)	
                     end
                 end
-            end
-            
-            if newUnit:hasAbility("use_medgel") and targetUnit:isKO() then
-                if targetUnit:isDead() then
-                    assert( targetUnit:getWounds() >= targetUnit:getTraits().woundsMax )
-                    targetUnit:getTraits().dead = nil
-                    targetUnit:addWounds( targetUnit:getTraits().woundsMax - targetUnit:getWounds() - 1 )			
-                end
-
-                sim:dispatchEvent( simdefs.EV_UNIT_FLOAT_TXT, {txt=STRINGS.UI.FLY_TXT.REVIVED,x=x1,y=y1,color={r=1,g=1,b=1,a=1}} )
-
-                targetUnit:setKO( sim, nil )
-                targetUnit:getTraits().mp = math.max( 0, targetUnit:getMPMax() - (targetUnit:getTraits().overloadCount or 0) )
-
-                sim:emitSpeech( targetUnit, speechdefs.EVENT_REVIVED )
             end
 
             if newUnit:hasAbility("use_aggression") then
