@@ -116,7 +116,7 @@ local shoot_defiblance =
 					unitData.usableWhileDead = true
 					unitData.usableWhileKO = true
 				end
-				if first_defiblance:hasAbility("use_stim") then
+				if first_defiblance:getTraits().mpRestored then
 					unitData.usableWhileKO = true
 					unitData.usableWhileAlive = true
 				end

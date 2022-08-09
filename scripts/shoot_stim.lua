@@ -116,7 +116,7 @@ local shoot_stim =
 					unitData.usableWhileDead = true
 					unitData.usableWhileKO = true
 				end
-				if first_stim:hasAbility("use_stim") then
+				if first_stim:getTraits().mpRestored then
 					unitData.usableWhileKO = true
 					unitData.usableWhileAlive = true
 				end

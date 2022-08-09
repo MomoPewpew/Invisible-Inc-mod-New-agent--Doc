@@ -116,7 +116,7 @@ local shoot_medgel =
 					unitData.usableWhileDead = true
 					unitData.usableWhileKO = true
 				end
-				if first_medgel:hasAbility("use_stim") then
+				if first_medgel:getTraits().mpRestored then
 					unitData.usableWhileKO = true
 					unitData.usableWhileAlive = true
 				end
