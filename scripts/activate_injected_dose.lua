@@ -36,10 +36,10 @@ local activate_injected_dose =
 			if targetUnit:getTraits().drugpistoldose then
                 local unitData = targetUnit:getTraits().drugpistoldose
 
-                if unitData.usableWhileDead and targetUnit:isDead() and not simquery.isUnitPinned( sim, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                if unitData.usableWhileDead and targetUnit:isDead() and not simquery.isUnitCellFull( sim, targetUnit ) and not simquery.isUnitDragged( sim, targetUnit ) then
                     return true
                 end
-                if unitData.usableWhileKO and targetUnit:isKO() and not targetUnit:isDead() and not simquery.isUnitPinned( sim, targetUnit) and not simquery.isUnitDragged( sim, targetUnit ) then
+                if unitData.usableWhileKO and targetUnit:isKO() and not targetUnit:isDead() and not simquery.isUnitCellFull( sim, targetUnit ) and not simquery.isUnitDragged( sim, targetUnit ) then
                     return true
                 end
                 if unitData.usableWhileAlive and not targetUnit:isKO() then
